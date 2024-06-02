@@ -1,4 +1,5 @@
-to run server: nodemon start
+When pull to new device, must reinstall node_modules: cd to server and npm init -y
+To run server: nodemon start
 
 SQL command to delete whole table data:
     SET FOREIGN_KEY_CHECKS = 0;
