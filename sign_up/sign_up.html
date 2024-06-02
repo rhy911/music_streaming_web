@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Music Streaming Sign Up</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="left-container">
+                <div class="logo-box">
+                    <div class="logo">LOGO</div>
+                </div>
+                <div class="signup-box">
+                    <form id="signUpForm" class="signup-form">
+                        <h2>Sign Up</h2>
+                        <p>Create your account.</p>
+                        <div class="input-group">
+                            <div class="left-group">
+                                <div class="username">
+                                    <div class="email-container">
+                                        <label for="username">User Name</label>
+                                        <input type="text" id="username-input"
+                                            placeholder="User Name" required>
+                                    </div>
+                                </div>
+                                <div class="password">
+                                    <div class="password-container">
+                                        <label for="password">Password</label>
+                                        <input type="password"
+                                            id="password-input"
+                                            placeholder="Password" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right-group">
+                                <div class="email">
+                                    <div class="email-container">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email-input"
+                                            placeholder="abc@example.com"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="password">
+                                    <div class="password-container">
+                                        <label
+                                            for="re_password">Re-Password</label>
+                                        <input type="password"
+                                            id="re_password-input"
+                                            placeholder="Re-Password" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="terms">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree with <a href="#">the
+                                    terms of use</a></label>
+                        </div>
+                        <button type="submit" id="sign-up-btn">Sign Up</button>
+                        <div class="social-signup">
+                            <p>Or sign up with:</p>
+                            <button class="google" type="button"
+                                title="Google Sign Up">
+                                <img src="/images/button/google.png"
+                                    alt="Google">
+                            </button>
+                            <button class="facebook" type="button"
+                                title="Facebook Sign Up">
+                                <img src="/images/button/facebook.png"
+                                    alt="Facebook">
+                            </button>
+                        </div>
+                        <p class="signin">Already have an account? <a
+                                href="/sign_in/sign_in.html">Sign in
+                                now.</a></p>
+                    </form>
+                </div>
+            </div>
+            <div class="right-container">
+                <div class="overlay">
+                    <h1>DISCOVER, STREAM AND SHARE YOUR MUSIC WITH THE ARTISTS
+                        AROUND THE WORLD.</h1>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+
+</html>

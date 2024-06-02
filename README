@@ -1,0 +1,6 @@
+to run server: nodemon start
+
+SQL command to delete whole table data:
+    SET FOREIGN_KEY_CHECKS = 0;
+    TRUNCATE TABLE users;
+    SET FOREIGN_KEY_CHECKS = 1;
