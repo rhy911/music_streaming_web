@@ -13,33 +13,28 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
 }
 
 .form-container {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 0.6rem;
-  border-radius: 0.325rem;
-  width: 30%;
-  height: 40%;
+  border-radius: 0.7rem;
+  height: 60vh;
   text-align: center;
-  box-shadow: 0 0 0.325rem rgba(0, 0, 0, 0.1);
 }
 
 .logo {
   font-size: 3vw;
   margin-bottom: 0.625rem;
 }
+
 .logo-box {
   background: rgba(255, 255, 255, 0.8);
   margin-bottom: 1.5rem;
 }
 
-h2 {
-  margin-bottom: 0.325rem;
-  font-size: 2vw;
-}
 
 p {
   margin: 1.25rem 1rem;
@@ -55,30 +50,24 @@ form {
 label {
   text-align: left;
   margin: 0 1rem;
-  font-size: 1.5vw;
 }
 
-input[type="email"] {
-  padding: 0.325rem;
+input[type="email"], input[type="password"] {
+  padding: 0.625rem;
   margin: 1rem 1rem;
-  border: 0.0625 solid #ccc;
   border-radius: 0.4rem;
-  font-size: 1.2vw;
 }
 
 /* Button styling */
-.reset-button {
-  margin: 2rem 1rem;
+button[type="submit"] {
+  margin: 1vh 2vw;
   padding: 1rem;
   background-color: orange;
-  border: none;
   color: white;
-  font-size: 1.25vw;
   border-radius: 0.325rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.reset-button:hover {
+button[type="submit"]:hover {
   background-color: darkorange;
 }

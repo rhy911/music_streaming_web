@@ -34,7 +34,6 @@ document.getElementById('signUpForm').addEventListener('submit', async function 
             alert(`Failed to create user: ${errorText}`);
         }
     } catch (error) {
-        console.error('Error:', error);
         alert('An error occurred while creating the user.');
     }
 });

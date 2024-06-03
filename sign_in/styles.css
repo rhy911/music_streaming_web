@@ -74,19 +74,19 @@ html {
     font-size: 1vw;
 }
 
-.email, .password {
+.username, .password {
     display: flex;
     justify-content: center;
 }
 
-.email-container, .password-container {
+.username-container, .password-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 75%;
 }
 
-.email-container label, .password-container label {
+.username-container label, .password-container label {
     font-size: 1.25vw;
 }
 

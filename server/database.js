@@ -10,27 +10,113 @@ const pool = mysql.createConnection({
 }).promise()
 
 export async function createUser(username, email, password) {
-    const [result] = await pool.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, password])
-    const id = result.insertId
-    return getUser(id)
+    try {
+        console.log(`Creating user with username: ${username}, email: ${email}`);
+        const [result] = await pool.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, password])
+        const id = result.insertId
+        console.log(`User created with id: ${id}`);
+        return getUser(id)
+    } catch (error) {
+        console.error('Error creating user:', error);
+        throw error;
+    }
 }
-// const result = await createUser('test', 'test', 'test')
-// console.log(result)
-
 
 export async function getAllUsers() {
-    const [rows] = await pool.query("SELECT * FROM users")
-    return rows
+    try {
+        console.log('Fetching all users');
+        const [rows] = await pool.query("SELECT * FROM users")
+        console.log(`Fetched ${rows.length} users`);
+        return rows
+    } catch (error) {
+        console.error('Error getting all users:', error);
+        throw error;
+    }
 }
+
 export async function getUser(id) {
-    const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id])
-    return rows[0]
+    try {
+        console.log(`Fetching user with id: ${id}`);
+        const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id])
+        console.log(`Fetched user: ${JSON.stringify(rows[0])}`);
+        return rows[0]
+    } catch (error) {
+        console.error(`Error getting user with id ${id}:`, error);
+        throw error;
+    }
 }
-// const users = await getUser(1)
-// console.log(users)
 
+export async function getUserByName(username) {
+    try {
+        console.log(`Fetching user with username: ${username}`);
+        const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username])
+        console.log(`Fetched user: ${JSON.stringify(rows[0])}`);
+        return rows[0]
+    } catch (error) {
+        console.error(`Error getting user with username ${username}:`, error);
+        throw error;
+    }
+}
 
-export async function deleteUser(id) {
-    const [rows] = await pool.query("DELETE FROM users WHERE user_id = ?", [id]);
-    return rows.affectedRows > 0;
+export async function getUserIdByEmail(email) {
+    try {
+        console.log(`Fetching user id by email: ${email}`);
+        const [rows] = await pool.query("SELECT user_id FROM users WHERE email = ?", [email]);
+        if (rows.length > 0) {
+            console.log(`Fetched user id: ${rows[0].user_id}`);
+            return rows[0].user_id;
+        }
+        console.log('No user found with this email');
+        return null;
+    } catch (error) {
+        console.error(`Error getting user id by email ${email}:`, error);
+        throw error;
+    }
+}
+
+export async function authenticateUser(username, password) {
+    try {
+        console.log(`Authenticating user with username: ${username}`);
+        const user = await getUserByName(username);
+        if (!user) {
+            console.log('User not found');
+            return null;
+        }
+
+        const match = await password === user.password;
+        if (match) {
+            console.log('Password match');
+            return user;
+        } else {
+            console.log('Password doesnt match');
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error authenticating user with username ${username}:`, error);
+        throw error;
+    }
+}
+
+export async function updatePassword(email, password) {
+    try {
+        console.log(`Updating password for email: ${email}`);
+        const userId = await getUserIdByEmail(email);
+        if (!userId) {
+            console.log('User not found');
+            return false;
+        }
+
+        const [rows] = await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [password, userId]);
+
+        if (rows.affectedRows > 0) {
+            console.log(`Password updated for email: ${email}`);
+            return true;
+        } else {
+            console.log(`No user found with email: ${email}`);
+            return false;
+        }
+    } catch (error) {
+        console.error(`Error updating password for email ${email}:`, error);
+        throw error;
+    }
 }
