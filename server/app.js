@@ -1,15 +1,36 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import multer from 'multer';
+import { v4 as uuid } from 'uuid';
 import {
     getAllUsers, getUser, createUser,
-    authenticateUser, updatePassword
-} from './database.js'
-const app = express()
+    authenticateUser, updatePassword, uploadSongs
+} from './database.js';
 
-app.use(express.json())
+const app = express();
+
+app.use(express.json());
 app.use(cors());
-const port = 8000
+const port = 8000;
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        if (file.mimetype.startsWith('audio/')) {
+            cb(null, 'uploads/audios')
+        } else if (file.mimetype.startsWith('image/')) {
+            cb(null, 'uploads/images');
+        } else {
+            console.log(file.mimetype);
+            cb({ error: 'Mime type not supported' })
+        }
+    },
+    filename: (req, file, cb) => {
+        const { originalname } = file;
+        cb(null, `${uuid()}-${originalname}`);
+    },
+});
+
+const upload = multer({ storage: storage, });
 
 app.post("/users", async (req, res) => {
     const { username, email, password } = req.body;
@@ -30,8 +51,8 @@ app.post("/login", async (req, res) => {
         console.log(`Authenticating user with username: ${username}`);
         const user = await authenticateUser(username, password);
         if (user) {
-            console.log('Login successfully');
-            res.status(200).send({ message: 'Login Successfully' });
+            console.log('Login successfully with user_id:', user.user_id);
+            res.status(200).send({ message: 'Login Successfully', user_id: user.user_id });
         } else {
             console.log('Invalid username or password');
             res.status(401).send({ message: 'Invalid username or password' });
@@ -60,6 +81,23 @@ app.post('/reset-password', async (req, res) => {
         }
     } catch (error) {
         console.error('Error resetting password:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.post("/upload", upload.fields([{ name: 'music', maxCount: 1 }, { name: 'artwork', maxCount: 1 }]), async (req, res) => {
+    const { title, artist, tags, description, userId } = req.body;
+    const music = req.files?.music?.[0]?.path || null;
+    const artwork = req.files?.artwork?.[0]?.path || null;
+
+    try {
+        const result = await uploadSongs(title, artist, userId, music, description, artwork, tags);
+        console.log('Uploading audio file:', music);
+        console.log('Uploading artwork:', artwork);
+        console.log(`Title: ${title}, Artist: ${artist}, Tags: ${tags}, Description: ${description}`);
+        res.status(200).json({ message: 'Upload successful' });
+    } catch (error) {
+        console.error('Error uploading:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
@@ -94,6 +132,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-app.listen(8000, () => {
+app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });

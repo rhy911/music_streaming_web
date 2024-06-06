@@ -16,9 +16,8 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         if (response.ok) {
             const data = await response.json();
-            alert('Login successful');
-            // Optionally store token or user info if needed
-            // localStorage.setItem('token', data.token);
+            sessionStorage.setItem('currentuser_id', data.user_id);
+            alert('Login successful with user_id: ' + sessionStorage.getItem('currentuser_id'));
             window.location.href = '/home/home.html';
         } else {
             const errorData = await response.json();

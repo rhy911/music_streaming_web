@@ -15,7 +15,7 @@ export async function createUser(username, email, password) {
         const [result] = await pool.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, password])
         const id = result.insertId
         console.log(`User created with id: ${id}`);
-        return getUser(id)
+        return getUser(id);
     } catch (error) {
         console.error('Error creating user:', error);
         throw error;
@@ -117,6 +117,44 @@ export async function updatePassword(email, password) {
         }
     } catch (error) {
         console.error(`Error updating password for email ${email}:`, error);
+        throw error;
+    }
+}
+
+export async function uploadSongs(title, artist, userId, music, description, artwork, tags) {
+    try {
+        console.log(`Uploading song for user: ${userId}`);
+        const [result] = await pool.query("INSERT INTO songs (title, artist, user_id, audio_path, description, image_path, tags) VALUES (?, ?, ?, ?, ?, ?, ?)", [title, artist, userId, music, description, artwork, tags]);
+        const id = result.insertId;
+        console.log(`Song uploaded with id: ${id}`);
+        return getSongById(id);
+    } catch (error) {
+        console.error('Error uploading song:', error);
+        throw error;
+    }
+}
+
+
+export async function getSongById(songId) {
+    try {
+        console.log(`Fetching song with id: ${songId}`);
+        const [rows] = await pool.query("SELECT * FROM songs WHERE song_id = ?", [songId]);
+        console.log(`Fetched song: ${JSON.stringify(rows[0])}`);
+        return rows[0];
+    } catch (error) {
+        console.error(`Error getting song with id ${songId}:`, error);
+        throw error;
+    }
+}
+
+export async function getSongsByUser(userId) {
+    try {
+        console.log(`Fetching songs for user: ${userId}`);
+        const [rows] = await pool.query("SELECT * FROM songs WHERE user_id = ?", [userId]);
+        console.log(`Fetched ${rows.length} songs`);
+        return rows;
+    } catch (error) {
+        console.error(`Error getting songs for user ${userId}:`, error);
         throw error;
     }
 }
