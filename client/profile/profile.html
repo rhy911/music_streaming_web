@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="profile.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo" onclick="navigateHome()">Logo</div>
+      <nav>
+        <ul>
+          <li class="tablink" onclick="openPage('Home', this, 'red')" id="defaultOpen">Home</li>
+          <li class="tablink" onclick="openPage('Upload', this, 'red')">Upload</li>
+          <li class="tablink" onclick="openPage('CreatePlaylist', this, 'red')">Create Playlist</li>
+        </ul>
+      </nav>
+      <div class="search-bar">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="What should we listen today ?" oninput="searchSongs(this.value)" value="" />
+        </div>
+        <div id="results" class="results hideResults"></div>
+      </div>
+      <div class="user-controls">
+        <img src="/images/button/inbox.png" alt="Inbox" />
+        <img src="/images/button/notification.png" alt="Notifications" />
+        <img src="/images/button/settings.png" alt="Settings" />
+        <div class="user-profile">
+          <img src="/images/avatar.png" alt="User Photo" onclick="navigateProfile()" />
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="user-info">
+        <div class="user-photo">
+          <img src="/images/avatar.png" alt="User Photo" />
+        </div>
+        <div class="user-details">
+          <h1 id="username"></h1>
+          <p id="email"></p>
+        </div>
+      </div>
+      <div class="body">
+        <h1>Your Uploads</h1>
+        <div class="user-uploads">
+          <img src="#" alt="list cover" id="most-recent" />
+          <ul id="user-uploads" class="upload-list"></ul>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-item">
+          <h2>Playlists</h2>
+          <ul id="playlists">
+            <li>Playlist 1</li>
+            <li>Playlist 2</li>
+            <li>Playlist 3</li>
+          </ul>
+        </div>
+        <div class="sidebar-item">
+          <h2>Recently Played</h2>
+          <ul id="recently-played">
+            <li>Recently Played 1</li>
+            <li>Recently Played 2</li>
+            <li>Recently Played 3</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="current-song">
+        <img src="/images/body.png" alt="Current Song" id="artwork" />
+        <div class="song-info">
+          <p class="artist-name" id="artist"></p>
+          <p class="song-title" id="title"></p>
+        </div>
+      </div>
+      <div class="player">
+        <div class="controls">
+          <button class="control-btn" id="prev-btn" onclick="prevSong()"><img src="/images/button/prev.png" alt="Previous" /></button>
+          <button class="control-btn" id="play-btn" onclick="playSong()"><img src="/images/button/play.png" alt="Play" /></button>
+          <button class="control-btn" id="next-btn" onclick="nextSong()"><img src="/images/button/next.png" alt="Next" /></button>
+        </div>
+        <div class="song-controls">
+          <p id="current-time">00:00</p>
+          <input type="range" id="timer" min="0" max="100" value="0" class="slider" title="Song Timer" />
+          <p id="duration-time">00:00</p>
+        </div>
+        <div class="controls">
+          <button class="control-btn"><img src="/images/button/repeat.png" alt="Repeat" /></button>
+          <button class="control-btn"><img src="/images/button/shuffle.png" alt="Shuffle" /></button>
+        </div>
+        <div class="volume-control" id="volume-control">
+          <img src="/images/button/volume.png" alt="Volume" id="volume-btn" onclick="volumePressed()" />
+          <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100" onchange="adjustVolume(this.value)" title="volume" />
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script src="profile.js"></script>
+  <script src="/client/header.js"></script>
+  <script src="/client/footer.js"></script>
+</html>

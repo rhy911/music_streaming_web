@@ -35,7 +35,6 @@ html {
   margin-bottom: 1.5rem;
 }
 
-
 p {
   margin: 1.25rem 1rem;
   font-size: 1.25vw;
@@ -52,7 +51,8 @@ label {
   margin: 0 1rem;
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"],
+input[type="password"] {
   padding: 0.625rem;
   margin: 1rem 1rem;
   border-radius: 0.4rem;

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="home.css" />
+    <script src="/client/footer/footerLoader.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Logo</div>
+      <nav>
+        <ul>
+          <li class="tablink" onclick="openPage('Home', this, 'red')" id="defaultOpen">Home</li>
+          <li class="tablink" onclick="openPage('Upload', this, 'red')">Upload</li>
+          <li class="tablink" onclick="openPage('CreatePlaylist', this, 'red')">Create Playlist</li>
+        </ul>
+      </nav>
+      <div class="search-bar">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="What should we listen today ?" oninput="searchSongs(this.value)" value="" />
+        </div>
+        <div id="results" class="results hideResults"></div>
+      </div>
+      <div class="user-controls">
+        <img src="/images/button/inbox.png" alt="Inbox" />
+        <img src="/images/button/notification.png" alt="Notifications" />
+        <img src="/images/button/settings.png" alt="Settings" />
+        <div class="user-profile">
+          <img src="/images/avatar.png" alt="User Photo" onclick="navigateProfile()" />
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="loadingIndicator">
+        <img src="/images/loading.gif" alt="Loading" />
+      </div>
+      <div id="Home" class="tabcontent">
+        <section class="content">
+          <h2>Recently Uploaded</h2>
+          <div class="song-grid" id="songs-container"></div>
+
+          <h2>My Playlist</h2>
+          <div class="song-grid" id="playlist-container"></div>
+
+          <h2>Trending</h2>
+          <div class="song-grid">
+            <div class="song-item">
+              <img src="/images/body.png" alt="Song Cover" />
+              <p>Bài hát học hành</p>
+              <p class="song-artist">youngtoobedeadsick</p>
+            </div>
+            <!-- More song items -->
+          </div>
+        </section>
+      </div>
+      <div id="Upload" class="tabcontent">
+        <section class="content">
+          <h2>Upload Your Audio Track</h2>
+          <form action="/upload" method="post" enctype="multipart/form-data" , id="upload-form">
+            <label for="upload-title">Title:</label>
+            <input type="text" name="title" id="upload-title" required /><br />
+
+            <label for="upload-artist">Artist:</label>
+            <input type="text" name="artist" id="upload-artist" /><br />
+
+            <label for="upload-tags">Tags:</label>
+            <input type="text" name="tags" id="upload-tags" /><br />
+
+            <label for="upload-description">Description:</label>
+            <textarea name="description" id="upload-description"></textarea><br />
+
+            <label for="upload-music">Audio File:</label>
+            <input type="file" name="music" id="upload-music" accept="audio/*" required /><br />
+
+            <label for="upload-artwork">Artwork:</label>
+            <input type="file" name="artwork" id="upload-artwork" accept="image/*" /><br />
+            <button type="submit" class="uploadBtn">Upload</button>
+          </form>
+        </section>
+      </div>
+      <div id="CreatePlaylist" class="tabcontent">
+        <section class="content">
+          <h2>Create Your Playlist</h2>
+          <form id="create-playlist-form" action="/createPlaylist" method="post" enctype="multipart/form-data">
+            <label for="playlist-title">Playlist Title:</label>
+            <input type="text" name="title" id="playlist-title" required /><br />
+
+            <label for="playlist-description">Description:</label>
+            <textarea name="description" id="playlist-description"></textarea><br />
+            <label for="playlist-cover">Playlist Cover:</label>
+            <input type="file" name="cover" id="playlist-cover" accept="image/*" /><br />
+
+            <button type="submit" class="createPlaylistBtn">Create Playlist</button>
+          </form>
+        </section>
+      </div>
+      <aside class="side-panel">
+        <div class="artist-suggestions">
+          <h3>You may like these artists</h3>
+          <div class="artist">
+            <img src="#" alt="Artist 1" />
+            <div>
+              <p class="artist-name">MCK</p>
+              <p class="followers">191K followers</p>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+          <div class="artist">
+            <img src="#" alt="Artist 2" />
+            <div>
+              <p class="artist-name">HIEUTHUHAI</p>
+              <p class="followers">75.7K followers</p>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+          <div class="artist">
+            <img src="#" alt="Artist 3" />
+            <div>
+              <p class="artist-name">aloluday</p>
+              <p class="followers">7.6K followers</p>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+        </div>
+        <hr class="divider" />
+        <div class="listening-history">
+          <h3>Listening history</h3>
+          <button class="view-all-btn">View all</button>
+          <div class="history-item">
+            <img src="#" alt="Song 1" />
+            <div>
+              <p class="song-title">bai hat hoc hanh</p>
+              <p class="artist-name">tlinh</p>
+              <p class="stats">228K <span>78K</span> <span>283</span></p>
+            </div>
+          </div>
+          <div class="history-item">
+            <img src="#" alt="Song 2" />
+            <div>
+              <p class="song-title">bài hát học hành</p>
+              <p class="artist-name">MCK</p>
+              <p class="stats">117K <span>54K</span> <span>438</span></p>
+            </div>
+          </div>
+          <div class="history-item">
+            <img src="#" alt="Song 3" />
+            <div>
+              <p class="song-title">bai hat hoc hanh</p>
+              <p class="artist-name">Wrxdie</p>
+              <p class="stats">192K <span>83K</span> <span>112</span></p>
+            </div>
+          </div>
+          <div class="history-item">
+            <img src="#" alt="Song 4" />
+            <div>
+              <p class="song-title">BÀI HÁT HỌC HÀNH</p>
+              <p class="artist-name">HIEUTHUHAI</p>
+              <p class="stats">365K <span>145K</span> <span>544</span></p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="current-song">
+        <img src="/images/body.png" alt="Current Song" id="artwork" />
+        <div class="song-info">
+          <p class="artist-name" id="artist"></p>
+          <p class="song-title" id="title"></p>
+        </div>
+      </div>
+      <div class="player">
+        <div class="controls">
+          <button class="control-btn" id="prev-btn" onclick="prevSong()"><img src="/images/button/prev.png" alt="Previous" /></button>
+          <button class="control-btn" id="play-btn" onclick="playSong()"><img src="/images/button/play.png" alt="Play" /></button>
+          <button class="control-btn" id="next-btn" onclick="nextSong()"><img src="/images/button/next.png" alt="Next" /></button>
+        </div>
+        <div class="song-controls">
+          <p id="current-time">00:00</p>
+          <input type="range" id="timer" min="0" max="100" value="0" class="slider" title="Song Timer" />
+          <p id="duration-time">00:00</p>
+        </div>
+        <div class="controls">
+          <button class="control-btn"><img src="/images/button/repeat.png" alt="Repeat" /></button>
+          <button class="control-btn"><img src="/images/button/shuffle.png" alt="Shuffle" /></button>
+        </div>
+        <div class="volume-control" id="volume-control">
+          <img src="/images/button/volume.png" alt="Volume" id="volume-btn" onclick="volumePressed()" />
+          <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100" onchange="adjustVolume(this.value)" title="volume" />
+        </div>
+      </div>
+    </footer>
+    <script src="home.js"></script>
+    <script src="/client/footer.js"></script>
+    <script src="/client/header.js"></script>
+    <script src="upload.js"></script>
+  </body>
+</html>
