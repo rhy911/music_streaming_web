@@ -176,6 +176,27 @@ main .body .playlist-songs .playlist-list {
 
 main .body .playlist-songs .playlist-list .playlist-item {
   display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+main .body .playlist-songs .playlist-list .playlist-item .more {
+  width: auto;
+  height: auto;
+  margin: 0 1vw;
+  border: none;
+}
+
+main .body .playlist-songs .playlist-list .playlist-item .dropdown-content {
+  margin-right: 1vw;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+main .body .playlist-songs .playlist-list .playlist-item .more img {
+  width: auto;
+  height: 5vh;
   cursor: pointer;
 }
 
@@ -350,5 +371,9 @@ footer .volume-control img {
 }
 
 .hideResults {
+  display: none;
+}
+
+.hidden {
   display: none;
 }

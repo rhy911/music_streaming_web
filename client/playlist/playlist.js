@@ -43,7 +43,11 @@ async function fetchSongs() {
               const songElement = document.createElement("li");
               songElement.className = "playlist-item";
               songElement.innerHTML = `
-            <img src="${song.cover_path}" alt="Artwork" class="song-cover">
+            <button class="more" id="more" onclick="openDropDown(${index})"><img src="/images/button/more.png" alt="More" /></button>
+            <div class="dropdown-content hidden" id="dropdown" data-dropdown-index="${index}">
+              <p onclick="removeSong(${song.song_id}, ${playlistId})">Remove</p>  
+            </div>
+            <img src="${song.cover_path}" alt="Artwork" class="song-cover"/>
             <div class="song-info" data-song-index="${index}" onclick="handleSongClick(${index})">
               <p class="song-title">${song.title} - </p>
               <p class="song-artist">${song.artist}</p>
@@ -128,6 +132,35 @@ async function searchSongsForPlaylist(value) {
     searchResults.innerHTML = "";
     searchResults.classList.add("hideResults");
   }
+}
+
+function removeSong(songId, playlistId) {
+  fetch(`http://localhost:8000/playlist/${playlistId}/remove/${songId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        fetchSongs();
+        alert("Song removed.");
+      } else {
+        alert("Failed to remove song from playlist.");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("An error occurred while removing the song from the playlist.");
+    });
+}
+
+let dropdown = false;
+function openDropDown(index) {
+  const dropdownElement = document.querySelector(`div.dropdown-content[data-dropdown-index="${index}"]`);
+  if (dropdown) {
+    dropdownElement.classList.remove("hidden");
+  } else {
+    dropdownElement.classList.add("hidden");
+  }
+  dropdown = !dropdown;
 }
 
 function formatTime(time) {

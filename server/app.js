@@ -3,7 +3,7 @@ import cors from "cors";
 import multer, { memoryStorage } from "multer";
 import { v4 as uuid } from "uuid";
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {
   getAllUsers,
   getUser,
@@ -20,6 +20,8 @@ import {
   getPlaylistSongs,
   createPlaylist,
   addSongToPlaylist,
+  removeSongFromPlaylist,
+  deleteSong,
 } from "./database.js";
 import { firebaseConfig } from "./firebase_config.js";
 
@@ -88,6 +90,31 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
+app.get("/users", async (req, res) => {
+  try {
+    console.log("Fetching all users");
+    const users = await getAllUsers();
+    console.log(`Fetched ${users.length} users`);
+    res.send(users);
+  } catch (error) {
+    console.error("Error getting all users:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+app.get("/users/:user_id", async (req, res) => {
+  const id = req.params.user_id;
+  try {
+    console.log(`Fetching user with id: ${id}`);
+    const user = await getUser(id);
+    console.log(`Fetched user: ${JSON.stringify(user)}`);
+    res.send(user);
+  } catch (error) {
+    console.error(`Error getting user with id ${id}:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 app.post(
   "/upload",
   upload.fields([
@@ -124,9 +151,61 @@ app.post(
   }
 );
 
+app.get("/songs", async (req, res) => {
+  try {
+    const songs = await fetchAllSongs();
+    res.send(songs);
+  } catch (error) {
+    console.error("Error getting all songs:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+app.get("/songs/:song_id", async (req, res) => {
+  const id = req.params.song_id;
+  try {
+    const song = await getSongById(id);
+    res.send(song);
+    console.log(`Fetched song: ${JSON.stringify(song.title)}`);
+  } catch {
+    console.error(`Error getting song with id ${id}:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+app.get("/songs/user/:user_id", async (req, res) => {
+  const id = req.params.user_id;
+  try {
+    const songs = await getSongsByUser(id);
+    res.send(songs);
+  } catch {
+    console.error(`Error getting songs for user with id ${id}:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+app.delete("/songs/delete/:song_id", async (req, res) => {
+  const id = req.params.song_id;
+  try {
+    const song = await getSongById(id);
+    const audioRef = ref(storage, song.audio_path);
+    const coverRef = ref(storage, song.cover_path);
+    console.log(`Deleting song with id: ${id}`);
+
+    await deleteSong(id);
+    await deleteObject(audioRef);
+    await deleteObject(coverRef);
+    console.log("Success");
+    res.status(200).send({ message: "Song deleted" });
+  } catch (error) {
+    console.error(`Error deleting song with id ${id}:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 app.post("/createPlaylist", upload.single("cover"), async (req, res) => {
   const { title, description, userId } = req.body;
-  const coverFile = req.file; // Corrected line
+  const coverFile = req.file;
 
   console.log(`Creating playlist for user: ${userId}`);
   try {
@@ -159,60 +238,16 @@ app.post("/playlist/:playlist_id/add/:song_id", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.delete("/playlist/:playlist_id/remove/:song_id", async (req, res) => {
+  const { playlist_id, song_id } = req.params;
+  const playlistId = parseInt(playlist_id);
+  const songId = parseInt(song_id);
   try {
-    console.log("Fetching all users");
-    const users = await getAllUsers();
-    console.log(`Fetched ${users.length} users`);
-    res.send(users);
+    console.log(`Removing song with id ${songId} from playlist with id ${playlistId}`);
+    await removeSongFromPlaylist(songId, playlistId);
+    res.status(200).send({ message: "Song removed from playlist" });
   } catch (error) {
-    console.error("Error getting all users:", error);
-    res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-app.get("/users/:user_id", async (req, res) => {
-  const id = req.params.user_id;
-  try {
-    console.log(`Fetching user with id: ${id}`);
-    const user = await getUser(id);
-    console.log(`Fetched user: ${JSON.stringify(user)}`);
-    res.send(user);
-  } catch (error) {
-    console.error(`Error getting user with id ${id}:`, error);
-    res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-app.get("/songs", async (req, res) => {
-  try {
-    const songs = await fetchAllSongs();
-    res.send(songs);
-  } catch (error) {
-    console.error("Error getting all songs:", error);
-    res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-app.get("/songs/:song_id", async (req, res) => {
-  const id = req.params.song_id;
-  try {
-    const song = await getSongById(id);
-    res.send(song);
-    console.log(`Fetched song: ${JSON.stringify(song.title)}`);
-  } catch {
-    console.error(`Error getting song with id ${id}:`, error);
-    res.status(500).send({ message: "Internal server error" });
-  }
-});
-
-app.get("/songs/user/:user_id", async (req, res) => {
-  const id = req.params.user_id;
-  try {
-    const songs = await getSongsByUser(id);
-    res.send(songs);
-  } catch {
-    console.error(`Error getting songs for user with id ${id}:`, error);
+    console.error(`Error removing song from playlist:`, error);
     res.status(500).send({ message: "Internal server error" });
   }
 });

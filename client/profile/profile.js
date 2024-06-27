@@ -26,7 +26,12 @@ window.onload = () => {
           audio.addEventListener("loadedmetadata", () => {
             const audioDuration = audio.duration;
             const songItem = document.createElement("li");
-            songItem.innerHTML = `<img src="${song.cover_path}" alt="list cover" />
+            songItem.innerHTML = `
+            <button class="more" id="more" onclick="openDropDown(${index})"><img src="/images/button/more.png" alt="More" /></button>
+            <div class="dropdown-content hidden" id="dropdown" data-dropdown-index="${index}">
+              <p onclick="deleteSong(${song.song_id})">Delete</p> 
+            </div>
+            <img src="${song.cover_path}" alt="list cover" />
             <div class="song-details" data-song-index="${index}" onclick="handleSongClick(${index})">
               <p>${song.artist} -</p>
               <p>${song.title}</p>
@@ -47,6 +52,30 @@ window.onload = () => {
       });
     });
 };
+
+let dropdown = false;
+function openDropDown(index) {
+  const dropdownElement = document.querySelector(`div.dropdown-content[data-dropdown-index="${index}"]`);
+  if (dropdown) {
+    dropdownElement.classList.remove("hidden");
+  } else {
+    dropdownElement.classList.add("hidden");
+  }
+  dropdown = !dropdown;
+}
+
+function deleteSong(song_id) {
+  fetch(`http://localhost:8000/songs/delete/${song_id}`, {
+    method: "DELETE",
+  })
+    .then(() => {
+      alert("Song deleted");
+      window.location.reload();
+    })
+    .catch(() => {
+      alert("An error occurred while deleting the song");
+    });
+}
 
 function formatTime(time) {
   const minutes = Math.floor(time / 60);

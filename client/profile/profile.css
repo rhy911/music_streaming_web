@@ -58,6 +58,26 @@ main .user-uploads .upload-list {
   margin: 0 0;
 }
 
+main .user-uploads .upload-list .more {
+  width: auto;
+  height: auto;
+  margin: 0 0vw;
+  border: none;
+}
+
+main .user-uploads .upload-list .dropdown-content {
+  margin-right: 1vw;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+main .user-uploads .upload-list .more img {
+  width: auto;
+  height: 5vh;
+  cursor: pointer;
+}
+
 main .user-uploads .upload-list li {
   display: flex;
   cursor: pointer;
@@ -272,4 +292,8 @@ footer .volume-control img {
   height: 4vh;
   margin: 0 0.5vw;
   cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }

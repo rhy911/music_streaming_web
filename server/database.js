@@ -190,6 +190,16 @@ export async function getSongsByUser(userId) {
   }
 }
 
+// Delete a song
+export async function deleteSong(songId) {
+  try {
+    const [result] = await pool.query("DELETE FROM songs WHERE song_id = ?", [songId]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // Playlist Functions
 
 // Create a playlist
@@ -241,6 +251,16 @@ export async function getPlaylistSongs(playlistId) {
       playlistId,
     ]);
     return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Delete a song from a playlist
+export async function removeSongFromPlaylist(songId, playlistId) {
+  try {
+    const [result] = await pool.query("DELETE FROM has WHERE song_id = ? AND playlist_id = ?", [songId, playlistId]);
+    return result;
   } catch (error) {
     throw error;
   }
